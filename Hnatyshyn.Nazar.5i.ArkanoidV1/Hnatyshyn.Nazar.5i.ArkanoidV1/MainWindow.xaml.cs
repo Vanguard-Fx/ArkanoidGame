@@ -25,7 +25,7 @@ namespace Hnatyshyn.Nazar._5i.ArkanoidV1
         SoundPlayer SoundCollisionPaddle = new SoundPlayer("Sounds/paddle.wav");
         SoundPlayer SoundCollisionBrick = new SoundPlayer("Sounds/brick.wav");
         SoundPlayer SoundLose = new SoundPlayer("Sounds/lose.wav");
-        MusicPlayerOld SoundTrack = new MusicPlayerOld("soundtrack.wav");
+        //MusicPlayerOld SoundTrack;
 
         GameStates GameState;
 
@@ -68,9 +68,12 @@ namespace Hnatyshyn.Nazar._5i.ArkanoidV1
 
             SoundCollisionPaddle.Load();
             SoundCollisionBrick.Load();
-
-            SoundTrack.Play(true);
-            SoundTrack.SetVolume(10);
+            //try
+            //{
+            //    SoundTrack = new MusicPlayerOld("soundtrack.wav");
+            //    SoundTrack.Play(true);
+            //}
+            //catch { }
         }
 
         private void CreateBricks(int StartYPos)
@@ -204,6 +207,22 @@ namespace Hnatyshyn.Nazar._5i.ArkanoidV1
                         Process.Start(Application.ResourceAssembly.Location);
                         Application.Current.Shutdown();
                     }
+                    if (GameState == GameStates.WaitToStart)
+                    {
+                        ball_timer.Start();
+                        SoundCollisionPaddle.Play();
+                        GameState = GameStates.Playing;
+                    }
+                    break;
+                case Key.Left:
+                    Paddle.PosX -= 20;
+                    if (GameState == GameStates.WaitToStart)
+                        Ball.PosX = Paddle.PosX + Paddle.Width / 2 - Ball.Width / 2;
+                    break;
+                case Key.Right:
+                    Paddle.PosX += 20;
+                    if (GameState == GameStates.WaitToStart)
+                        Ball.PosX = Paddle.PosX + Paddle.Width / 2 - Ball.Width / 2;
                     break;
             }
         }
@@ -278,7 +297,7 @@ namespace Hnatyshyn.Nazar._5i.ArkanoidV1
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            SoundTrack.StopPlaying();
+            //SoundTrack.StopPlaying();
         }
 
         private void Window_MouseMove(object sender, MouseEventArgs e)
