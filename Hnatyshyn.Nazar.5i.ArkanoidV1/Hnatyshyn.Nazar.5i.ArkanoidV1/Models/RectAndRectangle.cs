@@ -13,7 +13,7 @@ namespace Hnatyshyn.Nazar._5i.ArkanoidV1.Models
         public double Height { get { return height; } }
 
         private double posX;
-        public double PosX { get { return posX; } set { posX = value; Rectangle.Margin = new Thickness(posX, posY, 0, 0); Rect.Location = new Point(posX, posY); } }
+        public double PosX { get { return posX; } set { posX = value; if (value > 0) { Rectangle.Margin = new Thickness(posX, posY, 0, 0); Rect.Location = new Point(posX, posY); } } }
 
         private double posY;
         public double PosY { get { return posY; } set { posY = value; Rectangle.Margin = new Thickness(posX, posY, 0, 0); Rect.Location = new Point(posX, posY); } }

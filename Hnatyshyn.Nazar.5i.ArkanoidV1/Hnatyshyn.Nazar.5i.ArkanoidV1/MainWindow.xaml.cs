@@ -21,11 +21,12 @@ namespace Hnatyshyn.Nazar._5i.ArkanoidV1
         Paddle Paddle;
         Ball Ball;
         Brick[] Bricks;
+        GameStates StateBefore;
 
         SoundPlayer SoundCollisionPaddle = new SoundPlayer("Sounds/paddle.wav");
         SoundPlayer SoundCollisionBrick = new SoundPlayer("Sounds/brick.wav");
         SoundPlayer SoundLose = new SoundPlayer("Sounds/lose.wav");
-        //MusicPlayerOld SoundTrack;
+        //MusicPlayerOld SoundTrack = new MusicPlayerOld("soundtrack.wav");
 
         GameStates GameState;
 
@@ -68,12 +69,9 @@ namespace Hnatyshyn.Nazar._5i.ArkanoidV1
 
             SoundCollisionPaddle.Load();
             SoundCollisionBrick.Load();
-            //try
-            //{
-            //    SoundTrack = new MusicPlayerOld("soundtrack.wav");
-            //    SoundTrack.Play(true);
-            //}
-            //catch { }
+
+            //SoundTrack.Play(true);
+            //SoundTrack.SetVolume(10);
         }
 
         private void CreateBricks(int StartYPos)
@@ -215,14 +213,20 @@ namespace Hnatyshyn.Nazar._5i.ArkanoidV1
                     }
                     break;
                 case Key.Left:
-                    Paddle.PosX -= 20;
-                    if (GameState == GameStates.WaitToStart)
-                        Ball.PosX = Paddle.PosX + Paddle.Width / 2 - Ball.Width / 2;
+                    {
+                        if (Paddle.PosX > 0)
+                            Paddle.PosX -= 20;
+                        if (GameState == GameStates.WaitToStart)
+                            Ball.PosX = Paddle.PosX + Paddle.Width / 2 - Ball.Width / 2;
+                    }
                     break;
                 case Key.Right:
-                    Paddle.PosX += 20;
-                    if (GameState == GameStates.WaitToStart)
-                        Ball.PosX = Paddle.PosX + Paddle.Width / 2 - Ball.Width / 2;
+                    {
+                        if (Paddle.PosX + Paddle.Width < this.ActualWidth)
+                            Paddle.PosX += 20;
+                        if (GameState == GameStates.WaitToStart)
+                            Ball.PosX = Paddle.PosX + Paddle.Width / 2 - Ball.Width / 2;
+                    }
                     break;
             }
         }
@@ -232,13 +236,14 @@ namespace Hnatyshyn.Nazar._5i.ArkanoidV1
             if (GameState != GameStates.Pause)
             {
                 lbl_state.Content = "Pause";
+                StateBefore = GameState;
                 GameState = GameStates.Pause;
                 lbl_states_timer.Start();
             }
             else
             {
                 lbl_state.Content = "";
-                GameState = GameStates.Playing;
+                GameState = StateBefore;
                 lbl_states_timer.Stop();
             }
         }
